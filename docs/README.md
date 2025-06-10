@@ -1,9 +1,8 @@
-# KRAFTBEER CONNECT - アーキテクチャ概要
+# テンプレ
 
 ## 🎯 プロジェクト概要
 
-KRAFTBEER CONNECTは、クラフトビール愛好家向けの新しいコミュニティプラットフォームです。
-モダンなサーバレス構成をベースに、AI支援を活用した開発と運用の最適化を目指しています。
+テンプレ
 
 ## 🏗 技術スタック
 
@@ -16,7 +15,7 @@ KRAFTBEER CONNECTは、クラフトビール愛好家向けの新しいコミュ
 ## 🔧 ディレクトリ構成
 
 ```
-kraftbeer-connect/
+template-app/
 ├── service/
 │   ├── app/             # フロントエンド (Next.js)
 │   ├── server/          # APIサーバ (FastAPI + Strawberry)
