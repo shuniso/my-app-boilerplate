@@ -1,0 +1,62 @@
+services:
+  app:
+    name: frontend-app
+    description: |
+      Frontend application built with Next.js.
+      Provides the user interface for the service.
+      Communicates with the API server via GraphQL.
+    tech_stack:
+      - Next.js
+      - TypeScript
+      - Apollo Client
+    depends_on:
+      - server
+    endpoints:
+      - /
+      - /[resource]/[id]
+    deployment: Cloud Run
+
+  server:
+    name: graphql-api
+    description: |
+      API server built with FastAPI and Strawberry (GraphQL).
+      Handles authentication, business logic, and database operations.
+    tech_stack:
+      - FastAPI
+      - Strawberry
+      - Pydantic
+    depends_on:
+      - datastore
+    graphql_schema: .ai-index/api-schema/graphql-schema.graphql
+    deployment: Cloud Run
+
+  shared:
+    name: shared-library
+    description: |
+      Shared definitions used across app and server.
+      Includes types, validators, and utility functions.
+    tech_stack:
+      - TypeScript
+      - Python
+    used_by:
+      - app
+      - server
+
+  infra:
+    name: infrastructure
+    description: |
+      Infrastructure as code using Terraform.
+      Manages GCP services like Cloud Run, Firestore, and Cloud Build.
+    tech_stack:
+      - Terraform
+    deployment_strategy: GitHub Actions → Cloud Build → Terraform Apply
+
+datastore:
+  default:
+    name: primary-datastore
+    description: |
+      Serverless NoSQL database (e.g. Firestore).
+      Stores all core entities and scales automatically.
+    type: NoSQL
+    used_by:
+      - server

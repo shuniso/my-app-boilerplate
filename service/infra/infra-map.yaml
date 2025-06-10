@@ -1,0 +1,55 @@
+infrastructure:
+  project_id: ${GCP_PROJECT_ID}
+  region: ${GCP_REGION}
+
+  services:
+    - name: cloud_run_app
+      type: Cloud Run
+      description: |
+        Hosts the frontend (Next.js) application.
+        Supports both SSR and static content delivery.
+      source: service/app
+      runtime: Node.js
+      entrypoint: npm run start
+      deployed_by: infra
+
+    - name: cloud_run_server
+      type: Cloud Run
+      description: |
+        Hosts the GraphQL API server (FastAPI + Strawberry).
+        Handles client requests and connects to the NoSQL datastore.
+      source: service/server
+      runtime: Python
+      entrypoint: uvicorn main:app --host 0.0.0.0 --port 8080
+      deployed_by: infra
+
+    - name: firestore
+      type: Firestore (NoSQL)
+      description: |
+        Primary document database for storing core service data.
+        Automatically scales and integrates with GCP IAM.
+      used_by:
+        - cloud_run_server
+
+    - name: secret_manager
+      type: Secret Manager
+      description: |
+        Stores and manages sensitive data like API keys and credentials.
+      used_by:
+        - cloud_run_server
+
+    - name: cloud_build
+      type: Cloud Build
+      description: |
+        Executes build and deployment pipelines triggered by GitHub Actions.
+      triggered_by:
+        - GitHub Actions
+
+network:
+  public_access:
+    - cloud_run_app
+    - cloud_run_server
+
+  internal_access:
+    - firestore
+    - secret_manager

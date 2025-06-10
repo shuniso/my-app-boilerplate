@@ -1,0 +1,3 @@
+project_id   = "your-gcp-project-id"
+app_image    = "gcr.io/your-project/frontend-app:latest"
+server_image = "gcr.io/your-project/graphql-api:latest"

@@ -1,0 +1,49 @@
+entities:
+  user:
+    description: Basic user profile and metadata
+    fields:
+      id: string (UID)
+      display_name: string
+      email: string
+      avatar_url: string
+      created_at: timestamp
+      updated_at: timestamp
+
+  post:
+    description: User-generated content (e.g. blog, comment, review)
+    fields:
+      id: string
+      author_id: string (ref: user)
+      content: string
+      tags: list<string>
+      created_at: timestamp
+      updated_at: timestamp
+    indexes:
+      - field: author_id
+      - field: created_at desc
+
+  comment:
+    description: Comments linked to a post
+    fields:
+      id: string
+      post_id: string (ref: post)
+      author_id: string (ref: user)
+      content: string
+      created_at: timestamp
+    indexes:
+      - field: post_id
+
+  like:
+    description: User "likes" or other simple reactions
+    fields:
+      user_id: string (ref: user)
+      post_id: string (ref: post)
+      created_at: timestamp
+    primary_key: [user_id, post_id]
+
+  system_config:
+    description: Global configuration key-value pairs
+    fields:
+      key: string
+      value: any
+    primary_key: [key]
